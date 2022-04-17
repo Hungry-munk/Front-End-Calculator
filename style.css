@@ -1,0 +1,30 @@
+*,*::after,*::after{box-sizing: inherit;}
+
+html{
+    height:100%; /*getting footer to bottom and keeping it mobile friendly*/
+    box-sizing: border-box;
+    
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100%; /*getting footer to bottom and keeping it mobile friendly*/
+
+    padding: 0;
+    margin: 0;
+}
+
+header, footer{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   margin: 0;
+   padding: 0;
+}
+
+footer{
+    margin-top:auto;
+}
+

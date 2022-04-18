@@ -31,6 +31,7 @@ footer{
 main{
 display: flex;
 justify-content: center;
+align-items: center;
 
 border: 10px solid rgb(109, 32, 23);
 }
@@ -44,20 +45,23 @@ border: 10px solid rgb(109, 32, 23);
     display: grid;
     grid-template-columns: 3fr 1fr;
     border: 3px solid red;
+
+    height: 15%;
 }
 #screen{
     display: grid;
     grid-template-rows: 1fr 2fr;
 }
-
-#CalcButtons{
-
+#calc-buttons{
+    height: 85%;
+}
+#calc-grid{
+    height: 100%;
     display:grid;
 
-    grid-template-columns: repeat(4,25%);
-    grid-template-rows: repeat(5,25px);
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(5,1fr);
 
     border: 3px solid blue;
-
 }
 

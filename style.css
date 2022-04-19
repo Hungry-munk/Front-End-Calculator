@@ -1,5 +1,6 @@
 *,*::after,*::before{box-sizing: inherit;}
 
+/* page formatting */
 html{
     height:100%; /*getting footer to bottom and keeping it mobile friendly*/
     box-sizing: border-box;
@@ -11,8 +12,8 @@ body{
     flex-direction: column;
     height: 100%; /*getting footer to bottom and keeping it mobile friendly*/
 
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
 
 header, footer{
@@ -24,44 +25,53 @@ header, footer{
    padding: 0;
 }
 
-footer{
-    margin-top:auto;
-}
 
 main{
-display: flex;
-justify-content: center;
-align-items: center;
-
-border: 10px solid rgb(109, 32, 23);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border: 10px solid rgb(109, 32, 23);
 }
+
+/* whole calcualtor */
 #calculator{
     height: 500px;
     width: 400px;
     border:5px solid green
 }
 
+/* calculator display and delete button */
 #screen-b{
     display: grid;
     grid-template-columns: 3fr 1fr;
     border: 3px solid red;
-
+    
     height: 15%;
 }
 #screen{
     display: grid;
     grid-template-rows: 1fr 2fr;
 }
-#calc-buttons{
-    height: 85%;
-}
-#calc-grid{
-    height: 100%;
-    display:grid;
 
+/* calcualtor operators and operand buttons */
+#calc-grid{
+    height: 85%;
+
+    display:grid;    
     grid-template-columns: repeat(4,1fr);
     grid-template-rows: repeat(5,1fr);
-
+    
     border: 3px solid blue;
 }
+/* moving screen text to the right*/
+#equation, #CurrentInput{
+    display: flex;
+    flex-direction: row-reverse;
+}
 
+footer{
+    margin-top:auto;
+}
+
+/* end of page formatting */

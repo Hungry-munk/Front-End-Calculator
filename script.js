@@ -1,28 +1,29 @@
-
-const Currentinput = document.getElementById('CurrentInput');
 const currentEquation = document.getElementById('equation');
+const Currentinput = document.getElementById('CurrentInput');
 
 const NumberBtns =document.querySelectorAll('.num');
 const Operators = document.querySelectorAll('.operator');
+
 const equalBtn = document.getElementById('eqaul');
 const factorialBtn = document.getElementById('factorial')
+const resetBtn = document.getElementById('reset')
 
 let changeSecondNumber = false;
 
 //string format from input
-let firstNumstr='',
-    secondNumstr='',
-    operator = null;
+let firstNumstr='0',
+secondNumstr='',
+operator = null;
 
-    //to be equal num  version of str version
+//to be equal num  version of str version
 let firstnum,
-    secondnum;
+secondnum;
 
 let answer;
 // returns a value based on key, replacement for eval function
 
 //used to reset first number after a calculation and not append numbers to the answer
-let justCalculated = false
+let justCalculated = true
 
 const operation = {
     "+": function (num1,num2) {return num1 + num2},
@@ -32,13 +33,16 @@ const operation = {
     "**":function (num1,num2) {return num1 **num2},
     "!": function (num){//using gamma function to calculate factorial in case of decimal factorial
         num += 1
-        let desiredDecimalPrecision = 7, //7 is the max JS can handle 
-            p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
-
-        if (num < 0.5) return Math.PI / Math.sin(num * Math.PI) / gamma(1 - num)
-        else {
+        
+        let desiredDecimalPrecision = 7 //7 is the max JS can handle 
+        let p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+        let x = p[0];
+        
+        if (num < 0.5) {
+            num = 1 - num
+            return Math.PI / Math.sin(num * Math.PI) / Math.sqrt(2 * Math.PI) * Math.pow(t, (num + 0.5)) * Math.exp(-t) * x
+        } else {
             num--;
-            let x = p[0];
             for (let i = 1; i < desiredDecimalPrecision + 2; i++) {
                 x += p[i] / (num + i);
             }
@@ -54,16 +58,16 @@ NumberBtns.forEach(btn=>{
         if (changeSecondNumber){//choosing the second number
             secondNumstr += btn.getAttribute('data-number')
             Currentinput.textContent = secondNumstr
-
+            
             // after choosing the second number adding the operator to the current equation screen
             if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('**')&&!currentEquation.textContent.includes('÷'))
             currentEquation.textContent += ` ${operator}`
-
+            
         }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
             firstNumstr = btn.getAttribute('data-number')
             Currentinput.textContent = firstNumstr
             justCalculated = false
-
+            
         } else {//cohoosing the first number
             firstNumstr += btn.getAttribute('data-number')
             Currentinput.textContent = firstNumstr
@@ -78,7 +82,7 @@ Operators.forEach(operater =>{
         if (!changeSecondNumber && firstNumstr != ''){//choosing operator for equation initially
             changeSecondNumber=true
             operator = operater.getAttribute('data-operator')
-
+            
             currentEquation.textContent = firstNumstr
             Currentinput.textContent = operator
         } else if (secondNumstr==''){//changing chosen operator before changing second number
@@ -90,13 +94,14 @@ Operators.forEach(operater =>{
             firstCalulate()
             changeSecondNumber = true
             operator = operater.getAttribute('data-operator')
-
+            
             currentEquation.textContent = answer
             Currentinput.textContent = operator
         };
     });
 });
 
+//eqaul button
 equalBtn.onclick = ()=>{
     ConvertStrToFloat()
     firstCalulate()
@@ -104,15 +109,21 @@ equalBtn.onclick = ()=>{
     justCalculated = true
 };
 
+//clicking the factorial button
 factorialBtn.onclick = ()=>{
     firstnum = parseFloat(firstNumstr)
     answer = operation['!'](firstnum)
+    answer = roundResult(answer)
 
     currentEquation.textContent = `${firstNumstr}! =`
     Currentinput.textContent = answer
-    justCalculated = true
-    
+    justCalculated = true  
 };
+
+//AC button
+resetBtn.onclick = ()=> reset()
+
+
 
 // functions 
 
@@ -123,6 +134,8 @@ function ConvertStrToFloat(){//convertinfg str variables in actuall numbers to o
 
 function firstCalulate(){//getting an answer using 2 numbers and displaying it 
     answer = operation[operator](firstnum,secondnum)
+    answer = roundResult(answer)
+
     firstNumstr = `${answer}`
     
     currentEquation.textContent+= ` ${secondNumstr} = `
@@ -134,4 +147,27 @@ function firstCalulate(){//getting an answer using 2 numbers and displaying it
     operator = null
     firstnum = undefined
     secondnum = undefined
+};
+
+function reset (){//reseting calc
+    firstNumstr = '0'
+    secondNumstr = ''
+    answer = null
+    operator = null
+    firstnum = undefined
+    secondnum = undefined
+    justCalculated = true
+    changeSecondNumber = false
+
+    Currentinput.textContent = firstNumstr
+    currentEquation.textContent = ''
+};
+
+function roundResult(num){
+    return Math.round(num * 100000) / 100000
+};
+
+window.onload = ()=>{//loading page up
+Currentinput.textContent = firstNumstr
+
 };

@@ -54,11 +54,19 @@ Operators.forEach(operater =>{
             changeSecondNumber=true
             operator = operater.getAttribute('data-operator')
 
-            Currentinput.textContent = operator
             currentEquation.textContent = firstNumstr
-        }
-        else if (secondNumstr==''){//changing chosen operator before changing second number
+            Currentinput.textContent = operator
+        } else if (secondNumstr==''){//changing chosen operator before changing second number
             operator = operater.getAttribute('data-operator')
+            Currentinput.textContent = operator
+        }else if (!secondNumstr =='' && changeSecondNumber){
+            
+            ConvertStrToFloat()
+            firstCalulate()
+            changeSecondNumber = true
+            operator = operater.getAttribute('data-operator')
+
+            currentEquation.textContent = answer
             Currentinput.textContent = operator
         };
     });
@@ -67,23 +75,27 @@ Operators.forEach(operater =>{
 equalBtn.addEventListener('click', ()=>{
     ConvertStrToFloat()
     firstCalulate()
+    answer = null
 })
 
-function ConvertStrToFloat(){
+// functions 
+
+function ConvertStrToFloat(){//convertinfg str variables in actuall numbers to operate on
     firstnum = parseFloat(firstNumstr)
     secondnum = parseFloat(secondNumstr)
 };
 
-function firstCalulate(){
+function firstCalulate(){//getting an answer using 2 numbers and displaying it 
     answer = operation[operator](firstnum,secondnum)
-
     firstNumstr = `${answer}`
-
+    
     currentEquation.textContent+= ` ${secondNumstr} = `
     Currentinput.textContent = `${answer}`
-
+    
+    //reseting values
     secondNumstr=''
     changeSecondNumber = false
-    answer = null
-
-}
+    operator = null
+    firstnum = undefined
+    secondnum = undefined
+};

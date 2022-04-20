@@ -53,140 +53,52 @@ const operation = {
     },
 };
 
+
+//event listners
 //event listners for number buttns
 NumberBtns.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-        if (changeSecondNumber){//choosing the second number
-            secondNumstr += btn.getAttribute('data-number')
-            Currentinput.textContent = secondNumstr
-
-            if (Currentinput.textContent.includes('00')&& Currentinput.textContent.charAt(0) == '0'){
-                console.log('works')
-                Currentinput.textContent= '0'
-                secondNumstr = '0'
-            };
-            
-            // after choosing the second number adding the operator to the current equation screen
-            if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('^')&&!currentEquation.textContent.includes('÷'))
-            currentEquation.textContent += ` ${operator}`
-            
-        }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
-            firstNumstr = btn.getAttribute('data-number')
-            Currentinput.textContent = firstNumstr
-            justCalculated = false
-            
-        } else {//cohoosing the first number
-            firstNumstr += btn.getAttribute('data-number')
-            Currentinput.textContent = firstNumstr
-            
-            //trying to add multiple zeros
-            if (Currentinput.textContent.includes('00') && Currentinput.textContent.charAt(0) == '0'){
-                console.log('works')
-                Currentinput.textContent= '0'
-                firstNumstr = '0'
-                justCalculated = true
-            };
-        };
-        
-    });
-});
-
+    btn.addEventListener('click', ()=> pressednumber(btn)); });
 
 //event listners for operator buttons
 Operators.forEach(operater =>{
-    operater.addEventListener('click', ()=>{
-        if (!changeSecondNumber && firstNumstr != ''){//choosing operator for equation initially
-            changeSecondNumber=true
-            operator = operater.getAttribute('data-operator')
-            
-            currentEquation.textContent = firstNumstr
-            Currentinput.textContent = operator
-        } else if (secondNumstr==''){//changing chosen operator before changing second number
-            operator = operater.getAttribute('data-operator')
-            Currentinput.textContent = operator
-        }else if (!secondNumstr =='' && changeSecondNumber){//clicking an operator after second number is chosen
-            
-            ConvertStrToFloat()
-            firstCalulate()
-            changeSecondNumber = true
-            operator = operater.getAttribute('data-operator')
-            
-            currentEquation.textContent = answer
-            Currentinput.textContent = operator
-        };
-    });
-});
+    operater.addEventListener('click', ()=> pressedOperator(operater)); });
 
-//eqaul button
-equalBtn.onclick = ()=>{
-
-    if (secondNumstr == '' && operator!= null){
-        alert(
-           operator == ''?
-            'You need to choose an operator and second number first': 'you need to choose a second number first' 
-        )
-        return
-    }
-    
-    if (!changeSecondNumber){//in case the press eqaul without operator and second number
-        currentEquation.textContent = firstNumstr + " ="
-    }else{
-    ConvertStrToFloat()
-    firstCalulate()
-    
-    //the same as reseting and incase user presses negative after calculating and answer eqauls 0
-    // if (answer == 0) justCalculated = false
-    // else 
-    justCalculated = true
-    answer = null
-    };
-};
-
-//clicking the factorial button
-factorialBtn.onclick = ()=>{
-    firstnum = parseFloat(firstNumstr)
-
-    if (firstnum < 0){
-        alert('cant get factorial of negatives')
-        return
-    };
-
-    answer = operation['!'](firstnum)
-    answer = roundResult(answer)
-
-    currentEquation.textContent = `${firstNumstr}! =`
-    firstNumstr = answer
-    Currentinput.textContent = answer
-    justCalculated = true  
-};
-
-//AC button
+equalBtn.onclick = ()=> calculate()
+factorialBtn.onclick = ()=> factorial()
 resetBtn.onclick = ()=> reset()
+plusMinusBtn.onclick = ()=> plusMinus()
+decimalBtn.onclick = ()=> checkDecimal()
+deleteBtn.onclick = ()=> remove()
 
-// plus minus button 
-plusMinusBtn.onclick = ()=> {
-    //if user tries to make operator a negative number
-    if (Currentinput.textContent.includes('+')|| Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
-        alert('cant make an operator negative')
-    }
-    else if (justCalculated){
-        firstNumstr = '-'
-        Currentinput.textContent = '-'
-        justCalculated = false
-    }
-    else {
-        if (Currentinput.textContent == 0){
-            make0Negative()
-            justCalculated = false //so the negative sign isnt removed when number is clicked
-        } else if (Currentinput.textContent.includes('-')){
-            makePositive()
-        }else{
-            makeNegative()
-        }
+//Event listner functions
+function remove (){
+    if (!justCalculated){
+        if ( Currentinput.textContent == 0) return //no point deleting 0
+        if (changeSecondNumber) {
+            secondNumstr = secondNumstr.slice(0,-1)
+
+            if (Currentinput.textContent == '') {
+                Currentinput.textContent = 0
+                secondNumstr.textContent = 0 
+            };
+        }else{ 
+            firstNumstr= firstNumstr.slice(0,-1)
+
+            if (Currentinput.textContent == '') {
+                Currentinput.textContent = 0
+                firstNumstr.textContent = 0
+            }
+        };
+
+        Currentinput.textContent = Currentinput.textContent.slice(0,-1)  
+    }else if (operator!== null && Currentinput.textContent == '') {
+        operator = null
+    } else {
+        reset()
     }
 };
 
-decimalBtn.onclick = ()=> {
+function checkDecimal(){
     //for making original 0 a decmial
     if (Currentinput.textContent == 0) justCalculated = false
     //for negative decimals where the whole number is 0
@@ -211,10 +123,126 @@ decimalBtn.onclick = ()=> {
     addDecimal()
 };
 
-deleteBtn.onclick = ()=>{
-    remove()
-    console.log('run')
-}
+function plusMinus (){
+    //if user tries to make operator a negative number
+    if (Currentinput.textContent.includes('+')|| Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
+        alert('cant make an operator negative')
+    }
+    else if (justCalculated){
+        firstNumstr = '-'
+        Currentinput.textContent = '-'
+        justCalculated = false
+    }
+    else {
+        if (Currentinput.textContent == 0){
+            make0Negative()
+            justCalculated = false //so the negative sign isnt removed when number is clicked
+        } else if (Currentinput.textContent.includes('-')){
+            makePositive()
+        }else{
+            makeNegative()
+        }
+    }
+};
+
+function factorial (){
+    firstnum = parseFloat(firstNumstr)
+
+    if (firstnum < 0){
+        alert('cant get factorial of negatives')
+        return
+    };
+
+    answer = operation['!'](firstnum)
+    answer = roundResult(answer)
+
+    currentEquation.textContent = `${firstNumstr}! =`
+    firstNumstr = answer
+    Currentinput.textContent = answer
+    justCalculated = true  
+};
+
+
+function calculate (){
+    if (secondNumstr == '' && operator!= null){
+        alert(
+           operator == ''?
+            'You need to choose an operator and second number first': 'you need to choose a second number first' 
+        )
+        return
+    }
+    
+    if (!changeSecondNumber){//in case the press eqaul without operator and second number
+        currentEquation.textContent = firstNumstr + " ="
+    }else{
+    ConvertStrToFloat()
+    firstCalulate()
+    
+    //the same as reseting and incase user presses negative after calculating and answer eqauls 0
+    // if (answer == 0) justCalculated = false
+    // else 
+    justCalculated = true
+    answer = null
+    };
+};
+
+
+function pressednumber (btn){
+    if (changeSecondNumber){//choosing the second number
+        secondNumstr += btn.getAttribute('data-number')
+        Currentinput.textContent = secondNumstr
+
+        if (Currentinput.textContent.includes('00')&& Currentinput.textContent.charAt(0) == '0'){
+            console.log('works')
+            Currentinput.textContent= '0'
+            secondNumstr = '0'
+        };
+        
+        // after choosing the second number adding the operator to the current equation screen
+        if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('^')&&!currentEquation.textContent.includes('÷'))
+        currentEquation.textContent += ` ${operator}`
+        
+    }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
+        firstNumstr = btn.getAttribute('data-number')
+        Currentinput.textContent = firstNumstr
+        justCalculated = false
+        
+    } else {//cohoosing the first number
+        firstNumstr += btn.getAttribute('data-number')
+        Currentinput.textContent = firstNumstr
+        
+        //trying to add multiple zeros
+        if (Currentinput.textContent.includes('00') && Currentinput.textContent.charAt(0) == '0'){
+            console.log('works')
+            Currentinput.textContent= '0'
+            firstNumstr = '0'
+            justCalculated = true
+        };
+    };
+
+};
+
+function pressedOperator (operater){
+    if (!changeSecondNumber && firstNumstr != ''){//choosing operator for equation initially
+        changeSecondNumber=true
+        operator = operater.getAttribute('data-operator')
+        
+        currentEquation.textContent = firstNumstr
+        Currentinput.textContent = operator
+    } else if (secondNumstr==''){//changing chosen operator before changing second number
+        operator = operater.getAttribute('data-operator')
+        Currentinput.textContent = operator
+    }else if (!secondNumstr =='' && changeSecondNumber){//clicking an operator after second number is chosen
+        
+        ConvertStrToFloat()
+        firstCalulate()
+        changeSecondNumber = true
+        operator = operater.getAttribute('data-operator')
+        
+        currentEquation.textContent = answer
+        Currentinput.textContent = operator
+    };
+};
 
 // functions 
 
@@ -293,33 +321,6 @@ function addDecimal(){
 
         Currentinput.textContent += '.'
     } else alert('yamum')
-};
-
-function remove (){
-    if (!justCalculated){
-        if ( Currentinput.textContent == 0) return //no point deleting 0
-        if (changeSecondNumber) {
-            secondNumstr = secondNumstr.slice(0,-1)
-
-            if (Currentinput.textContent == '') {
-                Currentinput.textContent = 0
-                secondNumstr.textContent = 0 
-            };
-        }else{ 
-            firstNumstr= firstNumstr.slice(0,-1)
-
-            if (Currentinput.textContent == '') {
-                Currentinput.textContent = 0
-                firstNumstr.textContent = 0
-            }
-        };
-
-        Currentinput.textContent = Currentinput.textContent.slice(0,-1)  
-    }else if (operator!== null && Currentinput.textContent == '') {
-        operator = null
-    } else {
-        reset()
-    }
 };
 
 window.onload = ()=>{//loading page up

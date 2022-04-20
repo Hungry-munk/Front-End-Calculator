@@ -13,7 +13,7 @@ let changeSecondNumber = false;
 //string format from input
 let firstNumstr='0',
 secondNumstr='',
-operator = '+';
+operator = '';
 
 //to be equal num  version of str version
 let firstnum,
@@ -60,7 +60,7 @@ NumberBtns.forEach(btn=>{
             Currentinput.textContent = secondNumstr
             
             // after choosing the second number adding the operator to the current equation screen
-            if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('**')&&!currentEquation.textContent.includes('÷'))
+            if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('**')&&!currentEquation.textContent.includes('÷'))
             currentEquation.textContent += ` ${operator}`
             
         }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
@@ -137,6 +137,7 @@ plusMinusBtn.onclick = ()=> {
 
     if (Currentinput.textContent == 0){
         make0Negative()
+        justCalculated = false //so the negative sign isnt removed when number is clicked
     } else if (Currentinput.textContent.includes('-')){
         makePositive()
     }else{
@@ -189,21 +190,19 @@ function roundResult(num){
 function makeNegative(){
     if (changeSecondNumber){
         secondNumstr = '-' + secondNumstr
-        Currentinput.textContent = '-' + Currentinput.textContent
     }else{
         firstNumstr = '-' + firstNumstr
-        Currentinput.textContent = '-' + Currentinput.textContent
     };
+    Currentinput.textContent = '-' + Currentinput.textContent
 };
 
 function makePositive(){
     if (changeSecondNumber){
         secondNumstr = secondNumstr.slice(1)
-        Currentinput.textContent = Currentinput.textContent.slice(1)
     }else{
         firstNumstr = firstNumstr.slice(1)
-        Currentinput.textContent = Currentinput.textContent.slice(1)
     }
+    Currentinput.textContent = Currentinput.textContent.slice(1)
 };
 
 function make0Negative(){

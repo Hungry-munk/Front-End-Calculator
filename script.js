@@ -323,6 +323,10 @@ function addDecimal(){
     } else alert('yamum')
 };
 
+
+
+
+
 window.onload = ()=>{//loading page up
 Currentinput.textContent = firstNumstr
 

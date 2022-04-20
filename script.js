@@ -1,29 +1,29 @@
 const currentEquation = document.getElementById('equation');
 const Currentinput = document.getElementById('CurrentInput');
 
-const NumberBtns =document.querySelectorAll('.num');
+const NumberBtns = document.querySelectorAll('.num');
 const Operators = document.querySelectorAll('.operator');
 
 const equalBtn = document.getElementById('eqaul');
 const factorialBtn = document.getElementById('factorial')
 const resetBtn = document.getElementById('reset')
 const plusMinusBtn = document.getElementById('plusMinus')
-let changeSecondNumber = false;
+const decimalBtn = document.getElementById('decimal')
 
 //string format from input
 let firstNumstr='0',
-secondNumstr='',
-operator = '';
+    secondNumstr='',
+    operator = '';
 
 //to be equal num  version of str version
 let firstnum,
-secondnum;
-
-let answer;
+    secondnum,
+    answer;
 // returns a value based on key, replacement for eval function
 
 //used to reset first number after a calculation and not append numbers to the answer
 let justCalculated = true
+let changeSecondNumber = false;
 
 const operation = {
     "+": function (num1,num2) {return num1 + num2},
@@ -125,6 +125,7 @@ factorialBtn.onclick = ()=>{
     answer = roundResult(answer)
 
     currentEquation.textContent = `${firstNumstr}! =`
+    firstNumstr = answer
     Currentinput.textContent = answer
     justCalculated = true  
 };
@@ -134,15 +135,46 @@ resetBtn.onclick = ()=> reset()
 
 // plus minus button 
 plusMinusBtn.onclick = ()=> {
-
-    if (Currentinput.textContent == 0){
-        make0Negative()
-        justCalculated = false //so the negative sign isnt removed when number is clicked
-    } else if (Currentinput.textContent.includes('-')){
-        makePositive()
-    }else{
-        makeNegative()
+    //if user tries to make operator a negative number
+    if (!Currentinput.textContent.includes('+')&& !Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&!Currentinput.textContent.includes('!')&&!Currentinput.textContent.includes('*')&&!Currentinput.textContent.includes('**')&&!Currentinput.textContent.includes('÷')){
+        if (Currentinput.textContent == 0){
+            make0Negative()
+            justCalculated = false //so the negative sign isnt removed when number is clicked
+        } else if (Currentinput.textContent.includes('-')){
+            makePositive()
+        }else{
+            makeNegative()
+        }
+    } else {
+        alert('yamum')
     }
+};
+
+decimalBtn.onclick = ()=> {
+    //for making original 0 a decmial
+    if (Currentinput.textContent == 0) justCalculated = false
+    //for negative decimals where the whole number is 0
+
+    //id the user tries to add a decmial to a operator
+    if (Currentinput.textContent.includes('+')||Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')||Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('**')||Currentinput.textContent.includes('÷')){
+        alert('yamum')
+        return
+    }
+
+    if (Currentinput.textContent == '-'){
+        Currentinput.textContent = '-0'
+
+        if (changeSecondNumber) secondNumstr = '-0'
+        else firstNumstr = '-0'
+
+    } else if (justCalculated){// if a calculation just happened and it is a decimal
+        firstNumstr = '0'
+        Currentinput.textContent = '0'
+        justCalculated = false
+
+    } 
+
+    addDecimal()
 };
 
 // functions 
@@ -213,6 +245,15 @@ function make0Negative(){
         firstNumstr = '-'
     };
             
+};
+
+function addDecimal(){
+    if (!Currentinput.textContent.includes('.')){
+        if (changeSecondNumber)secondNumstr += '.'
+        else firstNumstr += '.'
+
+        Currentinput.textContent += '.'
+    } else alert('yamum')
 };
 
 window.onload = ()=>{//loading page up

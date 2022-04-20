@@ -9,6 +9,7 @@ const factorialBtn = document.getElementById('factorial')
 const resetBtn = document.getElementById('reset')
 const plusMinusBtn = document.getElementById('plusMinus')
 const decimalBtn = document.getElementById('decimal')
+const deleteBtn = document.getElementById('delete')
 
 //string format from input
 let firstNumstr='0',
@@ -30,11 +31,11 @@ const operation = {
     "-": function (num1,num2) {return num1 - num2},
     "*": function (num1,num2) {return num1 * num2},
     "÷": function (num1,num2) {return num1 / num2},
-    "**":function (num1,num2) {return num1 **num2},
+    "^":function (num1,num2) {return num1 **num2},
     "!": function (num){//using gamma function to calculate factorial in case of decimal factorial
         num += 1
         
-        let desiredDecimalPrecision = 7 //7 is the max JS can handle 
+        let desiredDecimalPrecision = 7 
         let p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
         let x = p[0];
         
@@ -60,7 +61,7 @@ NumberBtns.forEach(btn=>{
             Currentinput.textContent = secondNumstr
             
             // after choosing the second number adding the operator to the current equation screen
-            if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('**')&&!currentEquation.textContent.includes('÷'))
+            if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('^')&&!currentEquation.textContent.includes('÷'))
             currentEquation.textContent += ` ${operator}`
             
         }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
@@ -136,7 +137,7 @@ resetBtn.onclick = ()=> reset()
 // plus minus button 
 plusMinusBtn.onclick = ()=> {
     //if user tries to make operator a negative number
-    if (!Currentinput.textContent.includes('+')&& !Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&!Currentinput.textContent.includes('!')&&!Currentinput.textContent.includes('*')&&!Currentinput.textContent.includes('**')&&!Currentinput.textContent.includes('÷')){
+    if (!Currentinput.textContent.includes('+')&& !Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&!Currentinput.textContent.includes('!')&&!Currentinput.textContent.includes('*')&&!Currentinput.textContent.includes('^')&&!Currentinput.textContent.includes('÷')){
         if (Currentinput.textContent == 0){
             make0Negative()
             justCalculated = false //so the negative sign isnt removed when number is clicked
@@ -156,7 +157,7 @@ decimalBtn.onclick = ()=> {
     //for negative decimals where the whole number is 0
 
     //id the user tries to add a decmial to a operator
-    if (Currentinput.textContent.includes('+')||Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')||Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('**')||Currentinput.textContent.includes('÷')){
+    if (Currentinput.textContent.includes('+')||Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')||Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
         alert('yamum')
         return
     }
@@ -176,6 +177,11 @@ decimalBtn.onclick = ()=> {
 
     addDecimal()
 };
+
+deleteBtn.onclick = ()=>{
+    remove()
+    console.log('run')
+}
 
 // functions 
 
@@ -254,6 +260,33 @@ function addDecimal(){
 
         Currentinput.textContent += '.'
     } else alert('yamum')
+};
+
+function remove (){
+    if (!justCalculated){
+        if ( Currentinput.textContent == 0) return //no point deleting 0
+        if (changeSecondNumber) {
+            secondNumstr = secondNumstr.slice(0,-1)
+
+            if (Currentinput.textContent == '') {
+                Currentinput.textContent = 0
+                secondNumstr.textContent = 0 
+            };
+        }else{ 
+            firstNumstr= firstNumstr.slice(0,-1)
+
+            if (Currentinput.textContent == '') {
+                Currentinput.textContent = 0
+                firstNumstr.textContent = 0
+            }
+        };
+
+        Currentinput.textContent = Currentinput.textContent.slice(0,-1)  
+    }else if (operator!== null && Currentinput.textContent == '') {
+        operator = null
+    } else {
+        reset()
+    }
 };
 
 window.onload = ()=>{//loading page up

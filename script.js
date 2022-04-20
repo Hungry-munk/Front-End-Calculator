@@ -7,13 +7,13 @@ const Operators = document.querySelectorAll('.operator');
 const equalBtn = document.getElementById('eqaul');
 const factorialBtn = document.getElementById('factorial')
 const resetBtn = document.getElementById('reset')
-
+const plusMinusBtn = document.getElementById('plusMinus')
 let changeSecondNumber = false;
 
 //string format from input
 let firstNumstr='0',
 secondNumstr='',
-operator = null;
+operator = '+';
 
 //to be equal num  version of str version
 let firstnum,
@@ -88,7 +88,7 @@ Operators.forEach(operater =>{
         } else if (secondNumstr==''){//changing chosen operator before changing second number
             operator = operater.getAttribute('data-operator')
             Currentinput.textContent = operator
-        }else if (!secondNumstr =='' && changeSecondNumber){
+        }else if (!secondNumstr =='' && changeSecondNumber){//clicking an operator after second number is chosen
             
             ConvertStrToFloat()
             firstCalulate()
@@ -103,10 +103,19 @@ Operators.forEach(operater =>{
 
 //eqaul button
 equalBtn.onclick = ()=>{
+    
+    if (!changeSecondNumber){//in case the press eqaul without operator and second number
+        currentEquation.textContent = firstNumstr + " ="
+        justCalculated= true
+    }else{
     ConvertStrToFloat()
     firstCalulate()
+    
+    //the same as reseting and incase user presses negative after calculating and answer eqauls 0
+    if (answer == 0) justCalculated = false
+    else justCalculated = true
     answer = null
-    justCalculated = true
+    };
 };
 
 //clicking the factorial button
@@ -123,7 +132,17 @@ factorialBtn.onclick = ()=>{
 //AC button
 resetBtn.onclick = ()=> reset()
 
+// plus minus button 
+plusMinusBtn.onclick = ()=> {
 
+    if (Currentinput.textContent == 0){
+        make0Negative()
+    } else if (Currentinput.textContent.includes('-')){
+        makePositive()
+    }else{
+        makeNegative()
+    }
+};
 
 // functions 
 
@@ -165,6 +184,36 @@ function reset (){//reseting calc
 
 function roundResult(num){
     return Math.round(num * 100000) / 100000
+};
+
+function makeNegative(){
+    if (changeSecondNumber){
+        secondNumstr = '-' + secondNumstr
+        Currentinput.textContent = '-' + Currentinput.textContent
+    }else{
+        firstNumstr = '-' + firstNumstr
+        Currentinput.textContent = '-' + Currentinput.textContent
+    };
+};
+
+function makePositive(){
+    if (changeSecondNumber){
+        secondNumstr = secondNumstr.slice(1)
+        Currentinput.textContent = Currentinput.textContent.slice(1)
+    }else{
+        firstNumstr = firstNumstr.slice(1)
+        Currentinput.textContent = Currentinput.textContent.slice(1)
+    }
+};
+
+function make0Negative(){
+    Currentinput.textContent = '-'
+    if (changeSecondNumber){
+        secondNumstr = '-'
+    } else {
+        firstNumstr = '-'
+    };
+            
 };
 
 window.onload = ()=>{//loading page up

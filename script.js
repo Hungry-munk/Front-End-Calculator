@@ -145,6 +145,12 @@ equalBtn.onclick = ()=>{
 //clicking the factorial button
 factorialBtn.onclick = ()=>{
     firstnum = parseFloat(firstNumstr)
+
+    if (firstnum < 0){
+        alert('cant get factorial of negatives')
+        return
+    };
+
     answer = operation['!'](firstnum)
     answer = roundResult(answer)
 
@@ -160,7 +166,15 @@ resetBtn.onclick = ()=> reset()
 // plus minus button 
 plusMinusBtn.onclick = ()=> {
     //if user tries to make operator a negative number
-    if (!Currentinput.textContent.includes('+')&& !Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&!Currentinput.textContent.includes('!')&&!Currentinput.textContent.includes('*')&&!Currentinput.textContent.includes('^')&&!Currentinput.textContent.includes('÷')){
+    if (Currentinput.textContent.includes('+')|| Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
+        alert('cant make an operator negative')
+    }
+    else if (justCalculated){
+        firstNumstr = '-'
+        Currentinput.textContent = '-'
+        justCalculated = false
+    }
+    else {
         if (Currentinput.textContent == 0){
             make0Negative()
             justCalculated = false //so the negative sign isnt removed when number is clicked
@@ -169,8 +183,6 @@ plusMinusBtn.onclick = ()=> {
         }else{
             makeNegative()
         }
-    } else {
-        alert('yamum')
     }
 };
 

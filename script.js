@@ -59,6 +59,12 @@ NumberBtns.forEach(btn=>{
         if (changeSecondNumber){//choosing the second number
             secondNumstr += btn.getAttribute('data-number')
             Currentinput.textContent = secondNumstr
+
+            if (Currentinput.textContent.includes('00')&& Currentinput.textContent.charAt(0) == '0'){
+                console.log('works')
+                Currentinput.textContent= '0'
+                secondNumstr = '0'
+            };
             
             // after choosing the second number adding the operator to the current equation screen
             if (!currentEquation.textContent.includes('+')&& !currentEquation.textContent.slice(firstNumstr.length - 1).includes('-')&&!currentEquation.textContent.includes('!')&&!currentEquation.textContent.includes('*')&&!currentEquation.textContent.includes('^')&&!currentEquation.textContent.includes('÷'))
@@ -72,7 +78,16 @@ NumberBtns.forEach(btn=>{
         } else {//cohoosing the first number
             firstNumstr += btn.getAttribute('data-number')
             Currentinput.textContent = firstNumstr
+            
+            //trying to add multiple zeros
+            if (Currentinput.textContent.includes('00') && Currentinput.textContent.charAt(0) == '0'){
+                console.log('works')
+                Currentinput.textContent= '0'
+                firstNumstr = '0'
+                justCalculated = true
+            };
         };
+        
     });
 });
 
@@ -104,17 +119,25 @@ Operators.forEach(operater =>{
 
 //eqaul button
 equalBtn.onclick = ()=>{
+
+    if (secondNumstr == '' && operator!= null){
+        alert(
+           operator == ''?
+            'You need to choose an operator and second number first': 'you need to choose a second number first' 
+        )
+        return
+    }
     
     if (!changeSecondNumber){//in case the press eqaul without operator and second number
         currentEquation.textContent = firstNumstr + " ="
-        justCalculated= true
     }else{
     ConvertStrToFloat()
     firstCalulate()
     
     //the same as reseting and incase user presses negative after calculating and answer eqauls 0
-    if (answer == 0) justCalculated = false
-    else justCalculated = true
+    // if (answer == 0) justCalculated = false
+    // else 
+    justCalculated = true
     answer = null
     };
 };
@@ -157,7 +180,7 @@ decimalBtn.onclick = ()=> {
     //for negative decimals where the whole number is 0
 
     //id the user tries to add a decmial to a operator
-    if (Currentinput.textContent.includes('+')||Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')||Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
+    if (Currentinput.textContent.includes('+')||(Currentinput.textContent.slice(firstNumstr.length - 1).includes('-')&&firstNumstr!= '-')||Currentinput.textContent.includes('!')||Currentinput.textContent.includes('*')||Currentinput.textContent.includes('^')||Currentinput.textContent.includes('÷')){
         alert('yamum')
         return
     }
@@ -172,9 +195,7 @@ decimalBtn.onclick = ()=> {
         firstNumstr = '0'
         Currentinput.textContent = '0'
         justCalculated = false
-
     } 
-
     addDecimal()
 };
 

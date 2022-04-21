@@ -9,6 +9,7 @@
     <title>Calculator</title>
 
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://kit.fontawesome.com/7d9e28e2cd.js" crossorigin="anonymous"></script>
     <script src="script.js" defer></script>
 </head>
@@ -28,30 +29,30 @@
                 <div id="CurrentInput"></div>
             </div>
 
-            <button id="delete"><i class="fa-solid fa-delete-left"></i></button>
+            <button id="delete" style="color:gray;"><i class="fa-solid fa-delete-left"></i></button>
         </div>
 
         <div id="calc-grid">
-            <button class="btn" id="reset">AC</button>
-            <button class="btn operator" data-operator="^">x<sup>y</sup></button>
-            <button class="btn" id="factorial"data-operator="!">x!</button>
-            <button class="btn operator" data-operator="*">x</button>
+            <button class="btn outterBtn" id="reset">AC</button>
+            <button class="btn operator outterBtn " data-operator="^">x<sup>y</sup></button>
+            <button class="btn outterBtn" id="factorial"data-operator="!">x!</button>
+            <button class="btn operator outterBtn" data-operator="*">x</button>
             <button class="btn num" data-number="1">1</button>
             <button class="btn num" data-number="2">2</button>
             <button class="btn num" data-number="3">3</button>
-            <button class="btn operator" data-operator="÷">÷</button>
+            <button class="btn operator outterBtn" data-operator="÷">÷</button>
             <button class="btn num" data-number="4">4</button>
             <button class="btn num" data-number="5">5</button>
             <button class="btn num" data-number="6">6</button>
-            <button class="btn operator" data-operator="-">-</button>
+            <button class="btn operator outterBtn" data-operator="-">-</button>
             <button class="btn num" data-number="7">7</button>
             <button class="btn num" data-number="8">8</button>
             <button class="btn num" data-number="9">9</button>
-            <button class="btn operator" data-operator="+">+</button>
-            <button class="btn" id="plusMinus">+/-</button>
+            <button class="btn operator outterBtn" data-operator="+">+</button>
+            <button class="btn " id="plusMinus">+/-</button>
             <button class="btn num" data-number="0">0</button>
             <button class="btn" id="decimal">.</button>
-            <button class="btn" id="eqaul" data-operator="" >=</button>
+            <button class="btn outterBtn" id="eqaul" data-operator="" >=</button>
         </div>
 
     </div>
@@ -59,9 +60,9 @@
 </main>
 
 <footer>
-    <p style="font-size:1.4em; margin:0;">Made By : Hungry-munk</p>
+    <p style="font-size:1.4em; margin:0; margin-right: 7px;">Made By : Hungry-munk </p>
     <a id='github-link' href="https://github.com/Hungry-munk/Front-End-Calculator" target="_blank">
-        <i class="fa-brands fa-github "></i>
+        <i class="fa-brands fa-github " style="color:black; transform: scale(1.2);" ></i>
     </a>    
 </footer>
 

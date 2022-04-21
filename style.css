@@ -14,6 +14,9 @@ body{
 
     margin: 0;
     padding: 0;
+
+    background-color:#7e9091 ;
+    
 }
 
 header, footer{
@@ -23,31 +26,43 @@ header, footer{
 
    margin: 0;
    padding: 0;
+
 }
 
+header{
+font-family: "Zombie School";
+}
 
 main{
     display: flex;
     justify-content: center;
     align-items: center;
     
-    border: 10px solid rgb(109, 32, 23);
 }
 
 /* whole calcualtor */
 #calculator{
     height: 500px;
-    width: 400px;
-    border:5px solid green
+    width: 350px;
+
+    margin-top: 5em;
+
+    background-color:#2E3951;
+    border-radius: 20px;
+
+    box-shadow: 20px 20px 10px #0DB387;
+    
 }
 
 /* calculator display and delete button */
 #screen-b{
     display: grid;
     grid-template-columns: 3fr 1fr;
-    border: 3px solid red;
     
     height: 15%;
+    background-color: #212B41;
+    border-radius: 20px 20px 0 0;
+
 }
 #screen{
     display: grid;
@@ -61,17 +76,67 @@ main{
     display:grid;    
     grid-template-columns: repeat(4,1fr);
     grid-template-rows: repeat(5,1fr);
+
+    padding: 12px;
+    padding-top: 22px;
     
-    border: 3px solid blue;
 }
 /* moving screen text to the right*/
 #equation, #CurrentInput{
     display: flex;
     flex-direction: row-reverse;
+
+    font-family: "Digital Dream";
+    color:#0DB387 ;
+
 }
 
+#CurrentInput{
+    font-size: 1.5em;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+#equation{
+    font-size: 0.6em;
+    padding-top: 11px;
+    padding-right: 20px;;
+
+}
 footer{
     margin-top:auto;
 }
 
-/* end of page formatting */
+.btn, #delete{
+    margin: 10px;
+    padding: 0;
+    border-radius: 50%; 
+    background-color: #2E3951;
+    border: none;
+    color: gray;
+    
+    font-size: 2em;
+    font-weight: 500;
+    
+}
+#delete{
+    background-color: #212B41;
+    font-size: 1.5em;
+    padding-top: 5px;
+    padding-right:20px; ;
+}
+
+.outterBtn{
+    background-color: #212B41;
+    color: #0DB387;
+    font-size: 1.5em;
+}
+
+
+@font-face {
+    font-family: "Digital Dream";
+    src: url(fonts/DIGITALDREAM.ttf);
+}
+@font-face {
+    font-family: "Zombie School";
+    src: url(fonts/ZombieSchoolDemoRegular.ttf);
+}

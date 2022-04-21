@@ -14,7 +14,7 @@ const deleteBtn = document.getElementById('delete')
 //string format from input
 let firstNumstr='0',
     secondNumstr='',
-    operator = '';
+    operator = null;
 
 //to be equal num  version of str version
 let firstnum,
@@ -54,7 +54,7 @@ const operation = {
 };
 
 
-//event listners
+//onscreen button event listners
 //event listners for number buttns
 NumberBtns.forEach(btn=>{
     btn.addEventListener('click', ()=> pressednumber(btn)); });
@@ -63,17 +63,44 @@ NumberBtns.forEach(btn=>{
 Operators.forEach(operater =>{
     operater.addEventListener('click', ()=> pressedOperator(operater)); });
 
-equalBtn.onclick = ()=> calculate()
-factorialBtn.onclick = ()=> factorial()
-resetBtn.onclick = ()=> reset()
-plusMinusBtn.onclick = ()=> plusMinus()
-decimalBtn.onclick = ()=> checkDecimal()
-deleteBtn.onclick = ()=> remove()
+equalBtn.addEventListener('click', ()=> calculate())
+factorialBtn.addEventListener('click', ()=> factorial())
+resetBtn.addEventListener('click', ()=> reset())
+plusMinusBtn.addEventListener('click', ()=> plusMinus())
+decimalBtn.addEventListener('click', ()=> checkDecimal())
+deleteBtn.addEventListener('click', ()=> remove())
+
+//keyboard event listners
+
+// for operators
+document.addEventListener('keydown', (e)=>{
+    console.log(e.key)
+    let chosenKey = OperatorKey(e.key)
+    if (chosenKey) pressedOperator(chosenKey)
+});
+
+//for number buttons
+document.addEventListener('keydown', (e)=>{
+    if (!isNaN(parseFloat(e.key))) pressednumber(e.key) 
+
+    else if (e.key == '='||e.key == 'Enter') calculate()
+
+    else if (e.key == 'c'||e.key == 'C') reset()
+
+    else if (e.key == '.') checkDecimal()
+
+    else if (e.key == 'Backspace') remove()
+
+});
 
 //Event listner functions
 function remove (){
     if (!justCalculated){
         if ( Currentinput.textContent == 0) return //no point deleting 0
+
+        if (typeof operator == 'string'&& secondNumstr == '') operator = ''
+
+
         if (changeSecondNumber) {
             secondNumstr = secondNumstr.slice(0,-1)
 
@@ -83,7 +110,6 @@ function remove (){
             };
         }else{ 
             firstNumstr= firstNumstr.slice(0,-1)
-
             if (Currentinput.textContent == '') {
                 Currentinput.textContent = 0
                 firstNumstr.textContent = 0
@@ -164,7 +190,7 @@ function factorial (){
 
 
 function calculate (){
-    if (secondNumstr == '' && operator!= null){
+    if (secondNumstr == '' && operator == 'w'){
         alert(
            operator == ''?
             'You need to choose an operator and second number first': 'you need to choose a second number first' 
@@ -188,8 +214,15 @@ function calculate (){
 
 
 function pressednumber (btn){
+    let ChosenNum;
+
+    //if onscreen button is pressed
+    if (typeof btn == 'object') ChosenNum = btn.getAttribute('data-number')
+    // if keyboard button is pressed
+    else ChosenNum = btn
+
     if (changeSecondNumber){//choosing the second number
-        secondNumstr += btn.getAttribute('data-number')
+        secondNumstr += ChosenNum
         Currentinput.textContent = secondNumstr
 
         if (Currentinput.textContent.includes('00')&& Currentinput.textContent.charAt(0) == '0'){
@@ -203,12 +236,12 @@ function pressednumber (btn){
         currentEquation.textContent += ` ${operator}`
         
     }else if (justCalculated) {// reseting answer, so numbers arnt continously appended
-        firstNumstr = btn.getAttribute('data-number')
+        firstNumstr = ChosenNum
         Currentinput.textContent = firstNumstr
         justCalculated = false
         
     } else {//cohoosing the first number
-        firstNumstr += btn.getAttribute('data-number')
+        firstNumstr += ChosenNum
         Currentinput.textContent = firstNumstr
         
         //trying to add multiple zeros
@@ -223,21 +256,24 @@ function pressednumber (btn){
 };
 
 function pressedOperator (operater){
+    //if onscreen button is pressed
+    if(typeof operater == 'object') operator = operater.getAttribute('data-operator')
+    //keyboard value
+    else operator = operater
+
     if (!changeSecondNumber && firstNumstr != ''){//choosing operator for equation initially
         changeSecondNumber=true
-        operator = operater.getAttribute('data-operator')
         
         currentEquation.textContent = firstNumstr
         Currentinput.textContent = operator
     } else if (secondNumstr==''){//changing chosen operator before changing second number
-        operator = operater.getAttribute('data-operator')
+
         Currentinput.textContent = operator
     }else if (!secondNumstr =='' && changeSecondNumber){//clicking an operator after second number is chosen
         
         ConvertStrToFloat()
         firstCalulate()
         changeSecondNumber = true
-        operator = operater.getAttribute('data-operator')
         
         currentEquation.textContent = answer
         Currentinput.textContent = operator
@@ -323,8 +359,15 @@ function addDecimal(){
     } else alert('yamum')
 };
 
-
-
+function OperatorKey(key){
+    if (key == '+') return '+'
+    if (key == '/') return '÷'
+    if (key == '*') return '*'
+    if (key == '^') return '^'
+    if (key == '-') return '-'
+    if (key == '!') factorial()
+    return null
+};
 
 
 window.onload = ()=>{//loading page up

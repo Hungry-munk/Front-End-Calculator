@@ -28,6 +28,7 @@ header, footer{
    padding: 0;
 
    color:#0DB387 ;
+   font-size: 80%;
 }
 
 header{
@@ -46,12 +47,12 @@ main{
     height: 500px;
     width: 350px;
 
-    margin-top: 5em;
+    margin-top: 10%;
 
     background-color:#2E3951;
     border-radius: 20px;
 
-    box-shadow: 20px 20px 10px #0DB387;
+    box-shadow: 3vh 3vh 10px #0DB387;
     
 }
 

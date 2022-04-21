@@ -65,10 +65,10 @@ main{
     background-color: #212B41;
     border-radius: 20px 20px 0 0;
 
+    grid-template-rows:minmax(auto,auto) 1fr 2fr;
 }
 #screen{
     display: grid;
-    grid-template-rows: 1fr 2fr;
 }
 
 /* calcualtor operators and operand buttons */
@@ -95,19 +95,18 @@ main{
     max-width: 262.5px;
     overflow-x: auto;
     scrollbar-width:none;
+    padding-right: 20px;
 ;
 
 }
 
 #CurrentInput{
     font-size: 1.5em;
-    padding-right: 20px;
     padding-top: 10px;
 }
 #equation{
     font-size: 0.6em;
-    padding-top: 11px;
-    padding-right: 20px;;
+    padding: 10px;;
 
 }
 footer{
@@ -124,13 +123,16 @@ footer{
     
     font-size: 2em;
     font-weight: 500;
+
+    cursor: pointer;
     
 }
 #delete{
     background-color: #212B41;
     font-size: 1.5em;
-    padding-top: 5px;
-    padding-right:20px; ;
+    padding-top: 15px;
+    padding-right:20px; 
+    position: relative;
 }
 
 .outterBtn{

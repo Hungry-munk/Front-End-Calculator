@@ -90,6 +90,12 @@ main{
     font-family: "Digital Dream";
     color:#0DB387 ;
 
+
+    max-width: 262.5px;
+    overflow-x: auto;
+    scrollbar-width:none;
+;
+
 }
 
 #CurrentInput{
